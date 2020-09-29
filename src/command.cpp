@@ -2,7 +2,6 @@
 #include "common/common.hpp"
 
 #include "op/op.hpp"
-#include "rados/rados.hpp"
 #include "design_pattern.hpp"
 #include "level_db.hpp"
 #include "state_chart.hpp"
@@ -14,18 +13,22 @@
 #include "fuse_op.hpp"
 #include "algorithm.hpp"
 #include "tree/binary_tree.hpp"
+#include "bufferlist.hpp"
+#include "interval_set_op.h"
 
 using namespace std;
 
 Command::Command(Argument *_argument):argument(_argument)
 {
-	ops[CMD_RADOS]         = new RadosOp(_argument);
-	ops[CMD_RBD]           = new RBDOp(_argument);
 	ops[CMD_SMART_POINTER] = new SmartPtrOp(_argument);
 	ops[CMD_FUSE]          = new FuseOp(_argument);
 	ops[CMD_ALGORITHM]     = new AlgorithmOp(_argument);
 	ops[CMD_BINARY_TREE]   = new BinaryTreeOp(_argument);
 	ops[CMD_STATECHART]    = new StateMachineOp(_argument);
+	ops[CMD_BUFFERLIST]    = new BufferOp(_argument);
+	ops[CMD_INTERVAL_SET]  = new IntervalSetOp(_argument);
+	ops[CMD_LEVELDB]       = new LevelDBOp(_argument);
+	
 }
 
 Command::~Command()

@@ -49,7 +49,12 @@ int Argument::parse_cmd(int argc, char *argv[])
 		cmd = CMD_ALGORITHM;
 	} else if (strcmp(cmd_type.c_str(), "binarytree") == 0) {
 		cmd = CMD_BINARY_TREE;
-	}else {
+	} else if (strcmp(cmd_type.c_str(), "bufferlist") == 0) {
+		cmd = CMD_BUFFERLIST;
+	} else if (!strcmp(cmd_type.c_str(), "interval-set")) {
+		cmd = CMD_INTERVAL_SET;
+	}
+	else {
 		cout << "Not supported Command:" << cmd_type << endl;
 		return -EINVAL;
 	}
@@ -94,7 +99,11 @@ int Argument::parse_sub_cmd(int argc, char *argv[])
 		sub_cmd = SUB_CMD_ADAPTER;
 	} else if (strcmp(sub_cmd_type.c_str(), "mount") == 0) {
 		sub_cmd = SUB_CMD_MOUNT;
-	}else {
+	} else if (strcmp(sub_cmd_type.c_str(), "bufferlist") == 0) {
+		sub_cmd = SUB_CMD_BUFFERLIST;
+	} else if (strcmp(sub_cmd_type.c_str(), "journaler") == 0) {
+		sub_cmd = SUB_CMD_JOURNALER;
+	} else {
 		cout << "Not supported Sub-Command:" << sub_cmd_type << endl;
 		return -EINVAL;
 	}

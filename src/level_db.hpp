@@ -3,6 +3,7 @@
 
 #include "op/op.hpp"
 #include <string>
+#include <map>
 #include <leveldb/db.h>
 
 class LevelDBOp : public Op {
@@ -23,10 +24,11 @@ public:
 	virtual void exec();
 	virtual void help();
 	int init();
-	void db_write();
-	void db_read();
-	void db_delete();
-	void db_list();
+	int db_write(std::string key, std::string value);
+	int db_read(std::string key, std::string &value);
+	int db_delete();
+	void db_list(std::string marker);
+	void db_list(std::map<std::string, std::string> &out, int max, string &marker, bool &truncated);
 };
 
 #endif

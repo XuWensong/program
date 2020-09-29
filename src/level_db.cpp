@@ -1,3 +1,5 @@
+#include <leveldb/slice.h>
+#include <leveldb/options.h>
 #include "level_db.hpp"
 
 #include <iostream>
@@ -11,6 +13,8 @@ int LevelDBOp::init()
 	Options options;
 	options.create_if_missing = true;
 	options.error_if_exists = false;
+
+	db_path = "/root/.hqx01_kv";
 	Status s= DB::Open(options, db_path.c_str(), &db);
 	if (!s.ok()) {
 		cout << "Failed to open leveldb, error message:" << s.ToString() << endl;
@@ -27,42 +31,42 @@ void LevelDBOp::exec()
 		return;
 	}
 
+	string marker;
+	bool truncated = true;
+	while (truncated) {
+		
+	}
+
 	return;
 }
 
 void LevelDBOp::help()
 {
+	cout << "Support Commands:" << endl;
+	cout << " test       test leveldb interfaces" << endl;
 }
 
-void LevelDBOp::db_write()
+int LevelDBOp::db_write(string key, string value)
 {
-	string key = "first";
-	string value = "I am the first value";
 	Status s = db->Put(WriteOptions(), key, value);
 	if (!s.ok()) {
 		cout << "Failed to put kv to leveldb" << endl;
-		return;
+		return -1;
 	}
-
-	cout << "Put KV to leveldb successfully" << endl;
-	return;
+	return 0;
 }
 
-void LevelDBOp::db_read()
+int LevelDBOp::db_read(string key, string &value)
 {
-	string key = "first";
-	string value;
 	Status s = db->Get(ReadOptions(), key, &value);
 	if (!s.ok()) {
 		cout << "Failed to get kv to leveldb" << endl;
-		return;
+		return -1;
 	}
-
-	cout << "Read from leveldb, Key:" << key << ", Value:" << value << endl;
-	return;
+	return 0;
 }
 
-void LevelDBOp::db_delete()
+int LevelDBOp::db_delete()
 {
 	vector<string> keys;
 	leveldb::Iterator *it = db->NewIterator(ReadOptions());
@@ -75,22 +79,64 @@ void LevelDBOp::db_delete()
 		Status s = db->Delete(WriteOptions(), *iter);
 		if (!s.ok()) {
 			cout << "Failed to delete key from leveldb" << endl;
-			return;
+			return -1;
 		}
 
 		//cout << "Delete key from leveldb successfully" << endl;
 	}
 	
-	return;
+	return 0;
 }
 
-void LevelDBOp::db_list()
+void LevelDBOp::db_list(string marker)
 {
 	leveldb::Iterator *it = db->NewIterator(ReadOptions());
-	for (it->SeekToFirst(); it->Valid(); it->Next()) {
+	if (marker.empty()) {
+		it->SeekToFirst();
+	} else {
+		it->Seek(Slice(marker));
+	}
+
+	for (; it->Valid(); it->Next()) {
 		//cout << "Key:" << it->key().ToString() << ", Value:" << it->value().ToString() << endl;
 		cout << "Key:" << it->key().ToString() << endl;
 	}
 	delete it;
 	return;
+}
+
+void LevelDBOp::db_list(map<string, string > &out, int max, string &marker, bool &truncated)
+{
+	int cnt = 0;
+	leveldb::Iterator *it = m_db->NewIterator(ReadOptions());
+	if(marker.empty()) {
+		it->SeekToFirst();
+	} else {
+		it->Seek(Slice(marker));
+	}
+	
+	while (it->Valid() && cnt < max) {
+		out[it->key().ToString()] = it->value().ToString();
+
+		it->Next();
+		cnt++;
+
+		if (cnt == max) {
+			if (it->Valid()) {
+				marker = it->key().ToString();
+				truncated = true;
+			} else {
+				truncated = false;
+			}
+			break;
+		}
+
+		if (!it->Valid()) {
+			truncated = false;
+			break;
+		}
+	}
+
+	delete it;
+	it = NULL;
 }

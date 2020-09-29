@@ -52,8 +52,8 @@ public:
 };
 
 /**
-*1.若存在子状态，则无条件自动进入子状态；
-*2.若子状态已实现实现某种事件的响应，则优先调用当前状态的响应接口，否则调用父状态响应接口
+*
+*
 */
 struct Active;
 struct Started : sc::state<Started, StateMachine, Active>, NamedState {
@@ -65,8 +65,8 @@ public:
 };
 
 /**
-*state模板类的第二个参数为状态机或者父状态，第三个参数为初始子状态
-*状态机转入子状态时，会默认优先转入父状态
+*state
+*
 */
 struct Acting;
 struct Active : sc::state<Active, Started, Acting>, NamedState {
