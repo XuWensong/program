@@ -12,6 +12,24 @@ void DesignPatternOp::test_factory()
 	a = NULL;
 	delete b;
 	b = NULL;
+
+	TVFactory *haier = new HaierFactory();
+	TVFactory *gree = new GreeFactory();
+
+	TV* haier_tv = haier->produce();
+	TV* gree_tv = gree->produce();
+
+	haier_tv->play();
+	gree_tv->play();
+
+	delete haier;
+	haier = NULL;
+	delete gree;
+	gree = NULL;
+	delete haier_tv;
+	haier_tv = NULL;
+	delete gree_tv;
+	gree_tv = NULL;
 }
 
 void DesignPatternOp::test_abstract_factory()

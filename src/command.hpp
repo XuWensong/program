@@ -14,7 +14,7 @@ private:
 	Argument *argument;
 	std::map<int, Op*> ops;
 public:
-	Command(Argument *_argument);
+	Command(Argument *args);
 	~Command();
 	void execute();
 private:

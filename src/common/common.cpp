@@ -53,6 +53,8 @@ int Argument::parse_cmd(int argc, char *argv[])
 		cmd = CMD_BUFFERLIST;
 	} else if (!strcmp(cmd_type.c_str(), "interval-set")) {
 		cmd = CMD_INTERVAL_SET;
+	} else if (!strcmp(cmd_type.c_str(), "kernel")) {
+		cmd = CMD_KERNEL;
 	}
 	else {
 		cout << "Not supported Command:" << cmd_type << endl;
@@ -103,7 +105,10 @@ int Argument::parse_sub_cmd(int argc, char *argv[])
 		sub_cmd = SUB_CMD_BUFFERLIST;
 	} else if (strcmp(sub_cmd_type.c_str(), "journaler") == 0) {
 		sub_cmd = SUB_CMD_JOURNALER;
-	} else {
+	} else if (!strcmp(sub_cmd_type.c_str(), "containerof")) {
+		sub_cmd = SUB_CMD_CONTAINEROF;
+	}
+	else {
 		cout << "Not supported Sub-Command:" << sub_cmd_type << endl;
 		return -EINVAL;
 	}

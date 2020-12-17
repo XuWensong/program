@@ -1,4 +1,4 @@
-GXX = g++ -std=c++11
+GXX = g++ -std=gnu++11
 APPDIR = $(PWD)
 APPINCH = $(shell find $(APPDIR) -name "*.hpp")
 SRC = $(shell find $(APPDIR) -name "*.cpp")

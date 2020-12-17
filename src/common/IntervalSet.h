@@ -201,6 +201,68 @@ public:
 		if (!overlap(off, len))
 			return;
 	}
+	typename std::map<T, T> get_frags(T s, T l) {
+		T frag_off, frag_size;
+		bool find_new_off = false;
+		typename std::map<T, T> frags;
+		typename std::map<T, T>::iterator p = find(s);
+		if (p == m_inters.end()) {
+			frags[s] = l;
+			return frags;
+		}
+
+		if (p->first <= s && p->first + p->second >= s + l)
+			return frags;
+
+		if (s < p->first) {
+			frag_off = s;
+		} else{
+			frag_off = p->first + p->second;
+		}
+
+		find_new_off = true;
+
+		while (p != m_inters.end()) {
+			if (!find_new_off) {
+				if (s + l <= p->first + p->second) {
+					break;
+				}
+				frag_off = p->first + p->second;
+				find_new_off = true;
+			}
+
+			if (s + l <= p->first) {
+				frag_size = s + l - frag_off;
+				frags[frag_off] = frag_size;
+				break;
+			}
+
+			if (s + l <= p->first + p->second) {
+				frag_size = p->first - frag_off;
+				frags[frag_off] = frag_size;
+				break;
+			}
+
+			if (s + l >= p->first && p->first > frag_off) {
+				frag_size = p->first - frag_off;
+				frags[frag_off] = frag_size;
+				find_new_off = false;
+				continue;
+			}
+
+			p++;
+			if (p == m_inters.end()) {
+				frag_size = s + l - frag_off;
+			} else if (s + l >= p->first) {
+				frag_size = p->first - frag_off;
+			} else {
+				frag_size = s + l - frag_off;
+			}
+			frags[frag_off] = frag_size;
+			find_new_off = false;
+		}
+		return frags;
+	}
 	void dump() {
 		std::cout << "dump:" << std::endl;
 		typename std::map<T, T>::iterator p = m_inters.begin();

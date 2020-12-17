@@ -108,7 +108,7 @@ void LevelDBOp::db_list(string marker)
 void LevelDBOp::db_list(map<string, string > &out, int max, string &marker, bool &truncated)
 {
 	int cnt = 0;
-	leveldb::Iterator *it = m_db->NewIterator(ReadOptions());
+	leveldb::Iterator *it = db->NewIterator(ReadOptions());
 	if(marker.empty()) {
 		it->SeekToFirst();
 	} else {

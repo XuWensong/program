@@ -48,4 +48,52 @@ public:
 	ProductB():AbstractProduct("ProductB"){}
 	~ProductB(){}
 };
+
+class TV {
+public:
+	TV(){}
+	virtual ~TV(){}
+	virtual void play() = 0;
+};
+
+class HaierTV : public TV {
+public:
+	HaierTV():TV(){}
+	~HaierTV(){}
+	void play() {
+		cout << "HaierTV playing..." << endl;
+	}
+};
+
+class GreeTV : public TV {
+public:
+	GreeTV():TV(){}
+	~GreeTV(){}
+	void play() {
+		cout << "GreeTV playing..." << endl;
+	}
+};
+
+class TVFactory {
+public:
+	TVFactory(){}
+	virtual ~TVFactory(){}
+
+	virtual TV* produce() = 0;
+};
+
+class HaierFactory : public TVFactory {
+public:
+	HaierFactory():TVFactory() {}
+	~HaierFactory(){}
+	TV* produce() {return new HaierTV();}
+};
+
+class GreeFactory : public TVFactory {
+public:
+	GreeFactory():TVFactory(){}
+	~GreeFactory(){}
+	TV* produce() {return new GreeTV();}
+};
+
 #endif

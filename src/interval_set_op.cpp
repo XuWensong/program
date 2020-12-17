@@ -3,11 +3,19 @@
 
 void IntervalSetOp::exec()
 {
+	map<int, int> frags;
 	struct IntervalSet<int> is;
-	is.insert(50, 10);
+	is.insert(0, 50);
 	is.dump();
-	is.insert(55, 5);
-	is.dump();
+
+	frags = is.get_frags(2, 32);
+
+	cout << "frags:" << endl;
+	map<int, int>::iterator p = frags.begin();
+	for (; p != frags.end(); p++) {
+		cout << p->first << "     " << p->second << endl;
+	}
+	
 
 	cout << "size " << is.size() << endl;
 }

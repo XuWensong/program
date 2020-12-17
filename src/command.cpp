@@ -15,20 +15,21 @@
 #include "tree/binary_tree.hpp"
 #include "bufferlist.hpp"
 #include "interval_set_op.h"
+#include "kernel_op.h"
 
 using namespace std;
 
-Command::Command(Argument *_argument):argument(_argument)
+Command::Command(Argument *args):argument(args)
 {
-	ops[CMD_SMART_POINTER] = new SmartPtrOp(_argument);
-	ops[CMD_FUSE]          = new FuseOp(_argument);
-	ops[CMD_ALGORITHM]     = new AlgorithmOp(_argument);
-	ops[CMD_BINARY_TREE]   = new BinaryTreeOp(_argument);
-	ops[CMD_STATECHART]    = new StateMachineOp(_argument);
-	ops[CMD_BUFFERLIST]    = new BufferOp(_argument);
-	ops[CMD_INTERVAL_SET]  = new IntervalSetOp(_argument);
-	ops[CMD_LEVELDB]       = new LevelDBOp(_argument);
-	
+	ops[CMD_SMART_POINTER] = new SmartPtrOp(args);
+	ops[CMD_FUSE]          = new FuseOp(args);
+	ops[CMD_ALGORITHM]     = new AlgorithmOp(args);
+	ops[CMD_BINARY_TREE]   = new BinaryTreeOp(args);
+	ops[CMD_STATECHART]    = new StateMachineOp(args);
+	ops[CMD_BUFFERLIST]    = new BufferOp(args);
+	ops[CMD_INTERVAL_SET]  = new IntervalSetOp(args);
+	ops[CMD_LEVELDB]       = new LevelDBOp(args);
+	ops[CMD_KERNEL]        = new KernelOp(args);
 }
 
 Command::~Command()
